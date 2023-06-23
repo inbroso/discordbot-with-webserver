@@ -40,9 +40,15 @@ namespace discordbot
         {
             try
             {
-                // Config createn, WICHTIG: config.json im Debug Modus unter z.B. "C:\Users\marco\source\repos\discordbot\discordbot\bin\Debug\net6.0\" 
-                // und im Release Modus im Root Ordner
-                // -> ansonsten wird hier auch eine config mit den obigen Backupsachen created
+                // Environment Variables have to be set in order to run the bot:
+                // DISCORD_BOT_TOKEN = The Bot Token found in the developer portal
+                // DISCORD_GUILD_ID = The Guild ID of the server the bot is supposed to run on
+
+                // The Bot uses a config.json file to store the token and guild id, so you can also create a config.json if you don't know how to use environment variables.
+                //{
+                //  "Token": "TOKEN HERE",
+                //  "GuildId": "GUILD ID HERE"
+                //}
 
                 if (File.Exists(AppContext.BaseDirectory + "config.json"))
                 {
@@ -88,11 +94,11 @@ namespace discordbot
                     _commands.Log += LogAsync;
                     _client.Ready += ReadyAsync;
 
-                    // token aus der config nehmen und starten
+                    // Taking the token from the config
                     await _client.LoginAsync(TokenType.Bot, _config["Token"]);
                     await _client.StartAsync();
 
-                    // CommandHandler starten
+                    // Start CommandHandler
                     await _service.GetRequiredService<CommandHandler>().InitializeAsync();
                     _apiHandler = new APICommands(_handler, this);
 
@@ -125,16 +131,22 @@ namespace discordbot
 
             Console.WriteLine($"Connected as {_client.CurrentUser}");
 
-            await _client.SetStatusAsync(UserStatus.DoNotDisturb);
-            await _client.SetGameAsync("im Code rum...", null, ActivityType.Playing);
+
+            // Sets the bot's status
+            //await _client.SetStatusAsync(UserStatus.DoNotDisturb);
             
-            //await SetBotProfilePictureAsync(_client, "C:\\Users\\Shadow\\Pictures\\Logo.png");
+            // Sets the bot's activity
+            // ActivityType.Playing, Listening, Watching, Streaming
+            //await _client.SetGameAsync("im Code rum...", null, ActivityType.Playing);
+            
+            // Sets the bot's profile picture
+            //await SetBotProfilePictureAsync(_client, "INSERT PATH HERE!");
         }
 
-        // buildet den Service Provider
+        // builds the Service Provider
         private ServiceProvider ConfigureServices()
         {
-            // returned den Service Provider
+            // returns the Service Provider
             return new ServiceCollection()
                 .AddSingleton(_config)
                 .AddSingleton<DiscordSocketClient>()

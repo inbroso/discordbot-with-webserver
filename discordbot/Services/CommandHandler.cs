@@ -144,10 +144,18 @@ namespace discordbot.Services
             }
         }
 
+        /// <summary>
+        /// Sets a Role to a User
+        /// You can also add "exceptions" that specific role names can't be given to a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public async Task<Result> GiveRoleToUserAsync(IGuildUser user, IRole role)
         {
             if (user.RoleIds.Contains(role.Id))
                 return Result.AlreadyHasRole;
+            // Here you can set a role which shouldn't be allowed to be set
             if (role.Name.Contains("root"))
                 return Result.RoleNotAllowed;
 
@@ -155,6 +163,12 @@ namespace discordbot.Services
             return Result.Success;
         }
 
+        /// <summary>
+        /// Removes a Role from a User
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public async Task<Result> TakeRoleFromUserAsync(IGuildUser user, IRole role)
         {
             if (user.RoleIds.Contains(role.Id))
@@ -166,6 +180,11 @@ namespace discordbot.Services
                 return Result.DoesNotHaveRole;
         }
 
+        /// <summary>
+        /// Returns all Roles of a User
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<IReadOnlyCollection<SocketRole>> GetUserRolesAsync(IGuildUser user)
         {
             var _user = (SocketGuildUser)user;
@@ -173,6 +192,13 @@ namespace discordbot.Services
             return _roles;
         }
 
+        /// <summary>
+        /// Sets the Status of the Bot
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="activityType"></param>
+        /// <param name="userStatus"></param>
+        /// <returns></returns>
         public async Task<Result> SetBotStatusAsync(string status, ActivityType activityType, UserStatus userStatus)
         {
             try

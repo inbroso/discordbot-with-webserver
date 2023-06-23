@@ -24,17 +24,23 @@ namespace discordbot.Modules
             _discordBot = discordBot;
         }
 
-        //zum Testen erstmal im DiscordBot.cs drin lassen
+        // To test if the bot is working: Ping Pong Test!
         public async Task ProcessSlashCommandAsync(SocketGuild guild)
         {
-            // Hier kannst du den Slash-Befehl als Textnachricht in den Kanal senden:
             var channel = guild.TextChannels.FirstOrDefault(x => x.Id == botChannel);
             if (channel != null)
             {
-                await channel.SendMessageAsync($"Ping-Pong Test! Ich bin erreichbar!");
+                await channel.SendMessageAsync($"Ping-Pong! I'm ready!");
             }
         }
 
+        /// <summary>
+        /// Give a role to a user
+        /// </summary>
+        /// <param name="guild"></param>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public async Task ProcessGiveRolesCommandAsync(SocketGuild guild, ulong userId, ulong roleId)
         {
             var channel = guild.TextChannels.FirstOrDefault(x => x.Id == botChannel);
@@ -47,18 +53,26 @@ namespace discordbot.Modules
                     CommandHandler.Result result = await _handler.GiveRoleToUserAsync(user, role);
                 
                         if (result == CommandHandler.Result.Success)
-                            await channel.SendMessageAsync(guild.Name + ": " + $"Der User (**{user.Mention}**) bekam die Rolle: **{role.Mention}**");
+                            await channel.SendMessageAsync(guild.Name + ": " + $"The user (**{user.Mention}**) received the role: **{role.Mention}**");
                         else if (result == CommandHandler.Result.RoleNotAllowed)
-                            await channel.SendMessageAsync(guild.Name + ": " + $"Die Rolle **{role.Mention}** darf **nicht** vergeben werden!");
+                            await channel.SendMessageAsync(guild.Name + ": " + $"The role **{role.Mention}** is **not** allowed to be given!");
                         else if (result == CommandHandler.Result.AlreadyHasRole)
-                            await channel.SendMessageAsync(guild.Name + ": " + $"Der User (**{user.Mention}**) hat bereits die Rolle: **{role.Mention}**");
+                            await channel.SendMessageAsync(guild.Name + ": " + $"The user (**{user.Mention}**) already has the role: **{role.Mention}**");
                 }
                 catch (Exception ex)
                 {
-                    await channel.SendMessageAsync("Fehler: " + ex.Message);
+                    await channel.SendMessageAsync("Error: " + ex.Message);
                 }
             }
         }
+
+        /// <summary>
+        /// Take roles
+        /// </summary>
+        /// <param name="guild"></param>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public async Task ProcessTakeRolesCommandAsync(SocketGuild guild, ulong userId, ulong roleId)
         {
             var channel = guild.TextChannels.FirstOrDefault(x => x.Id == botChannel);
@@ -70,17 +84,21 @@ namespace discordbot.Modules
                     IGuildUser user = guild.GetUser(userId);
                     CommandHandler.Result result = await _handler.TakeRoleFromUserAsync(user, role);
                     if (result == CommandHandler.Result.Success)
-                        await channel.SendMessageAsync(guild.Name + ": " + $"Der User (**{user.Mention}**) hat die Rolle **{role.Mention}** weggenommen bekommen");
+                        await channel.SendMessageAsync(guild.Name + ": " + $"The user (**{user.Mention}**) has been taken away the role **{role.Mention}**");
                     else if (result == CommandHandler.Result.DoesNotHaveRole)
-                        await channel.SendMessageAsync(guild.Name + ": " + $"Der User (**{user.Mention}**) hat die Rolle **{role.Mention}** nicht");
+                        await channel.SendMessageAsync(guild.Name + ": " + $"The user (**{user.Mention}**) does not have the role **{role.Mention}**");
                 }
                 catch (Exception ex)
                 {
-                    await channel.SendMessageAsync("Fehler: " + ex.Message);
+                    await channel.SendMessageAsync("Error: " + ex.Message);
                 }
             }
         }
 
+        /// <summary>
+        /// Get all roles from a server
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<RoleInfo>> ProcessGetServerRolesCommandAsync()
         {
             DiscordSocketClient client = _discordBot.GetDiscordSocketClient();
@@ -105,6 +123,11 @@ namespace discordbot.Modules
             return roleInfo;
         }
 
+        /// <summary>
+        /// Get all roles from a user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<RoleInfo>> ProcessGetUserRolesCommandAsync(ulong userId)
         {
             DiscordSocketClient client = _discordBot.GetDiscordSocketClient();
