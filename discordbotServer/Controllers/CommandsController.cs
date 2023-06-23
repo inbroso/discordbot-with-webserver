@@ -55,8 +55,8 @@ namespace YourWebApiProject.Controllers
             return Ok("Take Role Command executed successfully.");
         }
 
-        //curl https://localhost:50001/commands/getserverroles - oder einfach auf die Seite gehen x)
-        //gibt alle Discord Rollen des Discord-Servers zurück - mit Rollenname, Farbe und Rollen-ID
+        //curl https://localhost:50001/commands/getserverroles - or go to the website
+        //gets all Discord roles of the server - with name, color and roleId
         [HttpGet("getserverroles")]
         public async Task<IActionResult> GetServerRoles()
         {
