@@ -5,6 +5,7 @@ With this Discord Bot you can send HTTP Requests to the Discord Bot, so you can 
 The webserver commands are in the CommandsController.cs in the discordbotServer project. There you can also add more.
 e.g. ( curl -X POST "https://localhost:50001/commands/giverole?userId=HEREID&roleId=HEREROLEID" ) is the HTTP Request to give a specific role to an user.
 
-
+```
 README is still under construction. But you can join my discord and ask me questions there if you need help:
 https://discord.gg/dv8tt5ygDP
+```
